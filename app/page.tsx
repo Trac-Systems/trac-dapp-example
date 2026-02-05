@@ -22,7 +22,7 @@ import {
   IconButton,
   Snackbar,
 } from '@mui/material';
-import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon';
+import CatchingTuxomonIcon from '@mui/icons-material/CatchingTuxomon';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import RefreshRoundedIcon from '@mui/icons-material/RefreshRounded';
@@ -53,14 +53,14 @@ function monoFont() {
 }
 
 function normalizeRows(payload: any): Row[] {
-  // Preferred shape: { pokemons: "[ {id,name,tx}, ... ]" }
+  // Preferred shape: { tuxomons: "[ {id,name,tx}, ... ]" }
   try {
-    let raw: any = (payload as any)?.pokemons;
+    let raw: any = (payload as any)?.tuxomons;
     if (!raw && (payload as any)?.value) {
       const v: any = (payload as any).value;
-      raw = typeof v === 'object' ? v.pokemons : undefined;
+      raw = typeof v === 'object' ? v.tuxomons : undefined;
       if (!raw && typeof v === 'string') {
-        try { raw = JSON.parse(v).pokemons; } catch {}
+        try { raw = JSON.parse(v).tuxomons; } catch {}
       }
     }
     if (raw) {
@@ -654,7 +654,7 @@ export default function Page() {
               <Button
                 variant="contained"
                 color="secondary"
-                startIcon={<CatchingPokemonIcon />}
+                startIcon={<CatchingTuxomonIcon />}
                 onClick={handleCatch}
                 disabled={!walletPubKey || sending}
                 sx={{
