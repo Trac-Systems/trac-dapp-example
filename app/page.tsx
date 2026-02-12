@@ -289,7 +289,7 @@ export default function Page() {
       const context = contextRes?.msb;
       if (!context || typeof context !== 'object') throw new Error('Failed to fetch tx context from peer');
 
-      const walletRequest = {
+      const contractTx = {
         requester: {
           address: walletAddress,
           pubKeyHex: walletPubKey,
@@ -301,27 +301,14 @@ export default function Page() {
         },
       };
 
-      // Wallet expects a transfer-like txData object with a "from" address, so we embed the trac-peer payload
-      // under `tracPeer` while keeping required top-level fields.
-      const txData = {
-        from: walletAddress,
-        to: walletAddress,
-        amount: '0',
-        validity: '0'.repeat(64),
-        nonce,
-        hash: '0'.repeat(64),
-        _bufferFields: ['hash', 'nonce'],
-        tracPeer: walletRequest,
-      };
-
-      console.log('[trac-peer] outgoing txData for signTracTx:', txData);
+      // console.log('[trac-peer] outgoing payload for signTracTx (contractTx):', contractTx);
 
       if (typeof provider.signTracTx !== 'function') {
-        await navigator.clipboard.writeText(JSON.stringify(txData, null, 2));
+        await navigator.clipboard.writeText(JSON.stringify(contractTx, null, 2));
         throw new Error('Wallet does not support signTracTx yet. Signing payload copied to clipboard.');
       }
 
-      const signedRaw = await provider.signTracTx(txData);
+      const signedRaw = await provider.signTracTx(contractTx);
       const { tx, signature } = parseWalletResponse(signedRaw);
       if (!tx) throw new Error('Wallet did not return tx hash');
       if (!signature) throw new Error('Wallet did not return a signature');
