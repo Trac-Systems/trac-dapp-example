@@ -290,18 +290,10 @@ export default function Page() {
       if (!context || typeof context !== 'object') throw new Error('Failed to fetch tx context from peer');
 
       const contractTx = {
-        requester: {
-          address: walletAddress,
-          pubKeyHex: walletPubKey,
-        },
-        tx: {
           prepared_command,
           nonce,
           context,
-        },
-      };
-
-      // console.log('[trac-peer] outgoing payload for signTracTx (contractTx):', contractTx);
+      }
 
       if (typeof provider.signTracTx !== 'function') {
         await navigator.clipboard.writeText(JSON.stringify(contractTx, null, 2));
